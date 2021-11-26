@@ -79,7 +79,7 @@ public class GameOfLive2D : MonoBehaviour
             {
                 CellBehaviour cell = hitInfo.collider.gameObject.GetComponent<CellBehaviour>();
                 Vector2Int pos = cell.GetPosition();
-                if (maps[pos.x,pos.y].IsAlive())
+                if (maps[pos.x, pos.y].IsAlive())
                 {
                     maps[pos.x, pos.y].Kill();
                 }
@@ -92,7 +92,7 @@ public class GameOfLive2D : MonoBehaviour
 
         timePast += Time.deltaTime;
 
-        if(timePast > 2f)
+        if (timePast > 2f)
         {
             UpdateMap();
             timePast -= 2;
@@ -107,8 +107,8 @@ public class GameOfLive2D : MonoBehaviour
         {
             for (int j = 0; j < width; j++)
             {
-                lastState[i,j] = maps[i, j].IsAlive();
-                newMap[i,j] = UpdateCell(i,j);
+                lastState[i, j] = maps[i, j].IsAlive();
+                newMap[i, j] = UpdateCell(i, j);
             }
         }
         precedentStates.Add(lastState);
@@ -119,7 +119,8 @@ public class GameOfLive2D : MonoBehaviour
                 if (newMap[i, j])
                 {
                     maps[i, j].Revive();
-                } else
+                }
+                else
                 {
                     maps[i, j].Kill();
                 }
@@ -136,8 +137,9 @@ public class GameOfLive2D : MonoBehaviour
             {
                 return true;
             }
-            
-        } else
+
+        }
+        else
         {
             if (countNeighbours == 3)
             {
@@ -145,16 +147,16 @@ public class GameOfLive2D : MonoBehaviour
             }
         }
         return false;
-    } 
+    }
 
     private int CountNeighbours(int i, int j)
     {
         int neighboursCount = 0;
-        for (int k = i-1; k <= i+1; k++)
+        for (int k = i - 1; k <= i + 1; k++)
         {
-            for(int l = j-1; l <= j+1; l++)
+            for (int l = j - 1; l <= j + 1; l++)
             {
-                if(k < 0 || height <= k)
+                if (k < 0 || height <= k)
                 {
                     continue;
                 }
@@ -162,7 +164,7 @@ public class GameOfLive2D : MonoBehaviour
                 {
                     continue;
                 }
-                if(k == i && l == j)
+                if (k == i && l == j)
                 {
                     continue;
                 }
@@ -189,11 +191,31 @@ public class GameOfLive2D : MonoBehaviour
         {
             LoadLastState();
         }
+        if (GUI.Button(new Rect(10, 450, 150, 100), "Clear"))
+        {
+            ClearMap();
+        }
+        /*if (GUI.Button(new Rect(10, 600, 150, 100), "3D"))
+        {
+            SceneManager.LoadScene("MyScene");
+        }*/
+    }
+
+    private void ClearMap()
+    {
+        for (int i = 0; i < height; i++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                maps[i, j].Kill();
+            }
+        }
     }
 
     private void LoadLastState()
     {
-        if (precedentStates.Count > 0) {
+        if (precedentStates.Count > 0)
+        {
             bool[,] lastState = precedentStates[precedentStates.Count - 1];
             for (int i = 0; i < height; i++)
             {
