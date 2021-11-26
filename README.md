@@ -13,3 +13,4 @@
 - [x] Enregistrement de chaque tour et rewind
 - [x] Faire un bouton pour faire le lien vers le Game Of Life 2d
 - [ ] Fix light
+- [ ] Rotative camera
