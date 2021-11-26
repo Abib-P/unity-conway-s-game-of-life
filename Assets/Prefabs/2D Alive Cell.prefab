@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1473780812464763731}
   - component: {fileID: 426858249247146568}
   m_Layer: 0
-  m_Name: Alive Cell
+  m_Name: 2D Alive Cell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

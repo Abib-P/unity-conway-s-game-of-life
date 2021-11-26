@@ -1,41 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class Cell
-{
-    GameObject aliveCell;
-    GameObject deadCell;
-    bool isAlive;
-    
-
-    public Cell(GameObject aliveCell, GameObject deadCell)
-    {
-        this.aliveCell = aliveCell;
-        this.deadCell = deadCell;
-        this.isAlive = false;
-        aliveCell.SetActive(false);
-    }
-
-    public void Kill()
-    {
-        isAlive = false;
-        aliveCell.SetActive(false);
-        deadCell.SetActive(true);
-    }
-
-    public void Revive()
-    {
-        isAlive = true;
-        aliveCell.SetActive(true);
-        deadCell.SetActive(false);
-    }
-
-    public bool IsAlive()
-    {
-        return isAlive;
-    }
-}
+using UnityEngine.SceneManagement;
 
 public class GameOfLive2D : MonoBehaviour
 {
@@ -52,12 +18,16 @@ public class GameOfLive2D : MonoBehaviour
     Texture2D cellTexture;
 
     [SerializeField, Range(1, 100)]
-    int width = 10;
+    int width = 17;
 
     [SerializeField, Range(1, 100)]
-    int height = 10;
+    int height = 17;
 
     float timePast = 0;
+
+    [SerializeField, Range(0, 2)]
+    float timeNeeded = 0.2f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -77,7 +47,7 @@ public class GameOfLive2D : MonoBehaviour
 
             if (Physics.Raycast(ray, out var hitInfo))
             {
-                CellBehaviour cell = hitInfo.collider.gameObject.GetComponent<CellBehaviour>();
+                CellBehaviour2D cell = hitInfo.collider.gameObject.GetComponent<CellBehaviour2D>();
                 Vector2Int pos = cell.GetPosition();
                 if (maps[pos.x, pos.y].IsAlive())
                 {
@@ -92,10 +62,10 @@ public class GameOfLive2D : MonoBehaviour
 
         timePast += Time.deltaTime;
 
-        if (timePast > 2f)
+        if (timePast > timeNeeded)
         {
             UpdateMap();
-            timePast -= 2;
+            timePast -= timeNeeded;
         }
     }
 
@@ -195,10 +165,10 @@ public class GameOfLive2D : MonoBehaviour
         {
             ClearMap();
         }
-        /*if (GUI.Button(new Rect(10, 600, 150, 100), "3D"))
+        if (GUI.Button(new Rect(10, 600, 150, 100), "3D Game of Life"))
         {
-            SceneManager.LoadScene("MyScene");
-        }*/
+            SceneManager.LoadScene("3D Game Of Life");
+        }
     }
 
     private void ClearMap()
@@ -243,11 +213,11 @@ public class GameOfLive2D : MonoBehaviour
             {
                 GameObject aliveObj = Instantiate(aliveCell);
                 GameObject deadObj = Instantiate(deadCell);
-                aliveObj.transform.position = new Vector3(i * 1.5f, j * 1.5f, 0);
-                deadObj.transform.position = new Vector3(i * 1.5f, j * 1.5f, 0);
-                CellBehaviour aliveCellBehaviour = aliveObj.GetComponent<CellBehaviour>();
+                aliveObj.transform.position = new Vector3(i * 1f, j * 1f, 0);
+                deadObj.transform.position = new Vector3(i * 1f, j * 1f, 0);
+                CellBehaviour2D aliveCellBehaviour = aliveObj.GetComponent<CellBehaviour2D>();
                 aliveCellBehaviour.SetPosition(i, j);
-                CellBehaviour deadCellBehaviour = deadObj.GetComponent<CellBehaviour>();
+                CellBehaviour2D deadCellBehaviour = deadObj.GetComponent<CellBehaviour2D>();
                 deadCellBehaviour.SetPosition(i, j);
                 maps[i, j] = new Cell(aliveObj, deadObj);
                 if (Random.Range(0, 3) == 0)
